@@ -181,25 +181,3 @@ void compara_ordena(double * coef, int * e, int n) {
       coef[pm] = t2;
    }
 }
-
-/*
-+
-2
-3 6
--2 5
-4
-2 4
-3 3
--2 2
--2 1
-
-1
-+
-2
-2 2
-2 1
-3
-1 5
--2 4
--7 3
-*/
