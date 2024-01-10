@@ -1,0 +1,7 @@
+{
+    "java.project.sourcePaths": [
+        "Algoritmo e Estrutura de Dados 2/TabelaHashProject/src",
+        "Algoritmo e Estrutura de Dados 2/SistemaDeEntregasProject/src/main/java/com/teamg/entregas",
+        "Algoritmo e Estrutura de Dados 2/SistemaDeEntregas/src/main/java/com/teamg/entregas"
+    ]
+}
