@@ -1,6 +1,7 @@
 package dominio;
 
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class Hash {
     private final int linhas = 50_000;
@@ -20,7 +21,7 @@ public class Hash {
         }
 
         int c = 0;
-        for (int i = 0; i< tabelaHash.length; i++) {
+        for (int i = 0; i < tabelaHash.length; i++) {
             Lista lista = tabelaHash[i];
             if (lista.tamanho == 0) continue;
             System.out.println(i + ": " + lista.listaToString());
@@ -30,12 +31,11 @@ public class Hash {
         if (c == 0) System.out.println("Tabela Vazia.");
 
         System.out.println("=============================================");
-
     }
 
+
     public void destroyTable() {
-        this.makeTable();
-        System.out.println("Tabela foi totalmente limpa com sucesso.");
+        this.tabelaHash = null;
     }
 
     public int sizeTable() {
@@ -56,6 +56,7 @@ public class Hash {
         if (this.sizeTable() >= 50_000_000) {
             System.out.println("Valor máximo de elementos alcançado. Não é possível inserir mais!");
         }
+
         int pos = hashFunction(x);
         this.tabelaHash[pos].adicionarNoFinal(x, dados);
     }
@@ -102,5 +103,123 @@ public class Hash {
     private int hashFunction(double chave) {
         int k = (int) ((chave * 1_000_000) % this.linhas);
         return k;
+    }
+
+    public void menu() {
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("\n=========== MENU ===========");
+            System.out.println("0. Sair");
+            System.out.println("1. Criar Tabela Vazia");
+            System.out.println("2. Mostrar Tabela");
+            System.out.println("3. Destruir Tabela");
+            System.out.println("4. Mostrar Tamanho da Tabela");
+            System.out.println("5. Inserir elemento na Tabela");
+            System.out.println("6. Buscar elemento na Tabela pela chave");
+            System.out.println("7. Buscar elementos na Tabela pelos dados");
+            System.out.println("8. Remover elemento da Tabela pela chave");
+            System.out.println("9. Remover elementos da Tabela pelos dados");
+
+            System.out.print("Escolha a opção (0-9): ");
+            int escolha = scanner.nextInt();
+
+            if ((escolha >= 0 && escolha <= 9) && (this.tabelaHash == null && (escolha != 0 && escolha != 1))) {
+                System.out.println("\nTabela ainda não criada.");
+                continue;
+            }
+
+            switch (escolha) {
+
+                case 0:
+                    // Sair
+                    System.out.println("Encerrando o programa.");
+                    scanner.close();
+                    System.exit(0);
+
+                case 1:
+                    // Criar Tabela Vazia
+                    this.makeTable();
+                    if (this.tabelaHash != null)
+                        System.out.println("Tabela Vazia criada com sucesso");
+                    else
+                        System.out.println("Erro ao criar a Tabela.");
+                    break;
+
+                case 2:
+                    // Mostrar Tabela
+                    this.showTable();
+                    break;
+
+                case 3:
+                    //Destruir a Tabela
+                    this.destroyTable();
+                    System.out.println("Tabela foi destruída com sucesso.");
+                    break;
+
+                case 4:
+                    // Mostrar Tamanho da Tabela
+                    System.out.println("A Tabela tem " + this.sizeTable() + " elementos");
+                    break;
+
+                case 5:
+                    // Inserir elemento
+                    System.out.print("Digite a chave (coloque vírgula como ponto flutuante): ");
+                    double chaveInserir = scanner.nextDouble();
+                    scanner.nextLine(); // Consumir a quebra de linha
+                    System.out.print("Digite os dados: ");
+                    String dadosInserir = scanner.nextLine();
+                    this.insertTable(chaveInserir, dadosInserir);
+                    break;
+
+                case 6:
+                    // Buscar elemento pela chave
+                    System.out.print("Digite a chave: ");
+                    double chaveBuscar = scanner.nextDouble();
+                    No resultadoBuscaChave = searchTable(chaveBuscar);
+
+                    if (resultadoBuscaChave != null) {
+                        System.out.println("Elemento encontrado: " + resultadoBuscaChave.nodeToString());
+                    } else {
+                        System.out.println("Elemento não encontrado.");
+                    }
+                    break;
+
+                case 7:
+                    // Buscar elemento pelos dados
+                    System.out.print("Digite os dados: ");
+                    scanner.nextLine(); // Consumir a quebra de linha
+                    String dadosBuscar = scanner.nextLine();
+                    No[] resultadoBuscaDados = searchTable(dadosBuscar);
+
+                    if (resultadoBuscaDados != null) {
+                        System.out.println("Elemento(s) encontrado(s):");
+                        for (No no: resultadoBuscaDados) {
+                            System.out.println(no.nodeToString());
+                        }
+                    } else {
+                        System.out.println("Não há nenhum elemento com esses dados!");
+                    }
+                    break;
+
+                case 8:
+                    // Remover elemento pela chave
+                    System.out.print("Digite a chave (coloque vírgula como ponto flutuante): ");
+                    double chaveRemover = scanner.nextDouble();
+                    this.removeTable(chaveRemover);
+                    break;
+
+                case 9:
+                    // Remover elementos pelos dadados
+                    System.out.print("Digite o dado: ");
+                    scanner.nextLine(); // consumir a quebra de linha
+                    String dadosRemover = scanner.nextLine();
+                    this.removeTable(dadosRemover);
+                    break;
+
+                default:
+                    System.out.println("Opção inválida. Tente novamente.");
+            }
+        }
     }
 }
